@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="style.css">
+      <title>TomChat</title>
+</head>
+<body>
+      <header>
+            <img class = 'img_logo' src = "img/logo.png" alt="">
+            <div class="header_buttons">
+                  <button class="button_in_header" onclick="window.location.href='index.html'">Private messages</button>
+                  <button class="button_in_header">Edit</button>
+                  <button class="button_in_header" onclick="window.location.href='login.html'">Login</button>
+            </div>
+           <div class="header_status">
+                 <p>You are online for: 1h 30m</p>
+                 <p class="local_time">Your local time is: 00:00</p>
+           </div>
+      </header>
+      <div class="content">
+            <div class="chat_list">
+                  <p class="p_online">Online: 2</p>
+                  <div class="div_users_online">
+                  <p class="user_online">John Snow</p>    
+                  <p class="user_online">Dean Winchester</p>
+                  <p class="user_online">Harry Potter</p>
+                  <p class="user_online">Elon Mask</p>
+
+                  <!-- <p>John Snow</p>    
+                  <p>Dean Winchester</p>
+                  <p>Harry Potter</p>
+                  <p>Elon Mask</p>
+
+                  <p>John Snow</p>    
+                  <p>Dean Winchester</p>
+                  <p>Harry Potter</p>
+                  <p>Elon Mask</p>
+
+                  <p>John Snow</p>    
+                  <p>Dean Winchester</p>
+                  <p>Harry Potter</p>
+                  <p>Elon Mask</p>
+
+                  <p>John Snow</p>    
+                  <p>Dean Winchester</p>
+                  <p>Harry Potter</p>
+                  <p>Elon Mask</p>
+
+                  <p>John Snow</p>    
+                  <p>Dean Winchester</p>
+                  <p>Harry Potter</p>
+                  <p>Elon Mask</p> -->
+                  </div>
+            </div>
+            <div class="chat">
+                  <div class="chat_block_message">
+                        <div class="tabs">
+                              <button>Main chat</button>
+                              <button>John <p class="close_chat">[x]</p></button>
+                        </div>
+                        <div class="inner_chat_block_message">
+                        
+                        </div>
+                  </div>
+                  <div class="block_send_message">
+                        <div class="inner_block_send_message">
+                              <input class="send_message_input" placeholder = 'Enter your message' type="text">
+                              <button class="send_message_button"><img class="send_message_button_img" src="img/6.png" alt=""></button>
+                        </div>
+                        <div class="style_text">
+                              <button>B</button>
+                              <button>I</button>
+                              <button>U</button>
+                              <button>Link</button>
+                        </div>
+                       
+                  </div>
+            </div>
+      </div>
+      <footer>
+            <p>31 characters entered</p>
+            <p>25 letters entered</p>
+            <p>4 whitespace characters entered</p>
+            <p>2 punctuation marks entered</p>
+      </footer>
+      <script src="script.js"></script>
+      <script src="clock.js"></script>
+</body>
+</html>
