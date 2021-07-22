@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="sass/styles.scss">
+      <title>TomChat</title>
+</head>
+<body>
+      <header>
+            <img class = 'img_logo' src = "images/logo.png" alt="">
+            <!-- <div class="header_buttons">
+                  <button class="button_in_header" onclick="window.location.href='index.html'">Private messages</button>
+                  <button class="button_in_header">Edit</button>
+                  <button class="button_in_header" onclick="window.location.href='login.html'">Login</button>
+            </div> -->
+           <!-- <div class="header_status">
+                 <p>You are online for: 1h 30m</p>
+                 <p class='local_time'>Your local time is: 00:00</p>
+           </div> -->
+      </header>
+      <div class="content_login"> 
+            <form class ='form_login' name = 'formLogin' action="#">
+                  <p>Authorization</p>
+                  <label for="">Login</label>
+                  <input name = 'username' type="text">
+                  <label for="">Password</label>
+                  <input name = 'password' type="text">
+                  <button onclick="return false" class = 'button_login'>Log in</button>
+                  <a href="registration.html">Registration</a>
+            </form>
+      </div>
+      <script>
+            const buttonLogin = document.querySelector('.button_login');
+            buttonLogin.onclick = function(){;
+                  const form = new FormData(document.forms.formLogin);
+                  const username = form.get('username');
+                  const password = form.get('password');
+                  const xhrLogin = new XMLHttpRequest();
+                  xhrLogin.open('GET','https://studentschat.herokuapp.com/users');
+                  xhrLogin.setRequestHeader('Content-Type', 'application/json');
+                  xhrLogin.send();
+                  xhrLogin.onload = function(){
+                        let flag = true;
+                        allUsers = JSON.parse(xhrLogin.response);
+                        for(let i = 0; i < allUsers.length; i++){
+                              if(username === allUsers[i].username){
+                                    if(password === allUsers[i].password){
+                                          document.cookie = `user=${username}`;
+                                          flag = false;
+                                          window.location.href = 'index.html';
+                                          break;
+                                          
+                                    }else{
+                                          alert('Password incorrect');
+                                          window.location.href = 'login.html';
+                                          break;
+                                    }
+                              }
+                        }
+                        if(flag){
+                              alert('Such user does not exist');
+                              window.location.href = 'login.html';
+                        }
+                        
+                  }
+            }
+      </script>
+</body>
+</html>

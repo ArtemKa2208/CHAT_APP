@@ -7,4 +7,3 @@ function getTime(){
       local_time.innerHTML = `Your local time is: ${hours}:${minutes}:${seconds}`;
 }
 setInterval(getTime,0);
-    
