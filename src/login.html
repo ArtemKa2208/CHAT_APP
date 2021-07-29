@@ -38,31 +38,43 @@
                   const username = form.get('username');
                   const password = form.get('password');
                   const xhrLogin = new XMLHttpRequest();
-                  xhrLogin.open('GET','https://studentschat.herokuapp.com/users');
+                  xhrLogin.open('POST','https://studentschat.herokuapp.com/users/login');
                   xhrLogin.setRequestHeader('Content-Type', 'application/json');
-                  xhrLogin.send();
+                  xhrLogin.send(JSON.stringify({
+                        'username': username, 
+                        'password': password
+                  }));
                   xhrLogin.onload = function(){
-                        let flag = true;
-                        allUsers = JSON.parse(xhrLogin.response);
-                        for(let i = 0; i < allUsers.length; i++){
-                              if(username === allUsers[i].username){
-                                    if(password === allUsers[i].password){
-                                          document.cookie = `user=${username}`;
-                                          flag = false;
-                                          window.location.href = 'index.html';
-                                          break;
+                        // let flag = true;
+                        if(xhrLogin.status === 200){
+                              allUsers = JSON.parse(xhrLogin.response)[0];
+                              console.log(xhrLogin.response)
+                              document.cookie = `user=${allUsers.username}`;
+                              document.cookie = `id=${allUsers.user_id}`;
+                              window.location.href = 'index.html';
+                        }else{
+                              alert(`Error ${xhrLogin.status}: ${xhrLogin.statusText}`);
+                        }
+                       
+                        // for(let i = 0; i < allUsers.length; i++){
+                        //       if(username === allUsers[i].username){
+                        //             if(password === allUsers[i].password){
+                        //                  
+                        //                   flag = false;
+                        //                   window.location.href = 'index.html';
+                        //                   break;
                                           
-                                    }else{
-                                          alert('Password incorrect');
-                                          window.location.href = 'login.html';
-                                          break;
-                                    }
-                              }
-                        }
-                        if(flag){
-                              alert('Such user does not exist');
-                              window.location.href = 'login.html';
-                        }
+                        //             }else{
+                        //                   alert('Password incorrect');
+                        //                   window.location.href = 'login.html';
+                        //                   break;
+                        //             }
+                        //       }
+                        // }
+                        // if(flag){
+                        //       alert('Such user does not exist');
+                        //       window.location.href = 'login.html';
+                        // }
                         
                   }
             }

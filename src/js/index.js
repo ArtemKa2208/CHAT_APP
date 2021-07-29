@@ -13,13 +13,13 @@ function sendMessage(){
       let text_style = '';
       button.onclick = function(){
             let xhrSendMessages = new XMLHttpRequest(); 
-            const cookie = document.cookie.split('=');                      
+            const username = (document.cookie.split(';')[1]).split('=')[1];                     
             xhrSendMessages.open("POST",'https://studentschat.herokuapp.com/messages');
             xhrSendMessages.setRequestHeader('Content-Type', 'application/json');
             xhrSendMessages.send(JSON.stringify({
                   datetime: new Date().toISOString(),
                   message:input.value,
-                  username:cookie[1],
+                  username:username,
             }));
             xhrSendMessages.onload = function(){
                   if(input.value){
@@ -151,7 +151,7 @@ getUsers();
 
 function getMessage(){
       const blockForMessage = document.querySelector('.inner_chat_block_message');
-      const cookie = document.cookie.split('=');
+      const username = (document.cookie.split(';')[1]).split('=')[1];
       let xhr = new XMLHttpRequest();
       let messages;
       xhr.open('GET','https://studentschat.herokuapp.com/messages');
@@ -172,7 +172,7 @@ function getMessage(){
                   const year = date.getFullYear();
                   const hours = (date.getHours() < 10) ? '0' + date.getHours() : date.getHours();
                   const minutes = (date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes();
-                  if(messages[i].username === cookie[1]){
+                  if(messages[i].username === username){
                         firstDiv.classList.add('chat__item','chat__item--responder'); 
                         secondDiv.classList.add('chat__my_message-content'); 
                         secondDiv.innerText = messages[i].message;   
@@ -224,20 +224,46 @@ function setName(){
 }
 setName();
 
-// function exit(){
-//       const buttonExit = document.querySelector('.button_username');
-//       buttonExit.onclick = function(){
-//             if(buttonExit.innerHTML === 'Exit'){
-//                   let xhr = new XMLHttpRequest();
-//                   let allUsers;
-//                   xhr.open('POST','https://studentschat.herokuapp.com/users/register');
-//                   xhr.setRequestHeader('Content-Type', 'application/json');
-//                   xhr.send(JSON.stringify({user_id:710424788,username:"Harry Potter",password:"123456789",status:"inactive"}));
-//                   xhr.onload = function(){
-//                         console.log('GOOD')
-//                   }
-//             }
-//       }
+function exit(){
+      const username = (document.cookie.split(';')[1]).split('=')[1];
+      const userId = (document.cookie.split(';')[2]).split('=')[1];
+      const buttonExit = document.querySelector('.button_username');
+      console.log(username)
+      buttonExit.onclick = function(){
+            if(buttonExit.innerHTML === 'Exit'){
+                  let xhr = new XMLHttpRequest();
+                  let allUsers;
+                  xhr.open('POST','https://studentschat.herokuapp.com/users/logout');
+                  xhr.setRequestHeader('Content-Type', 'application/json');
+                  xhr.send(JSON.stringify({
+                        status:"inactive",
+                        user_id:userId,
+                        username:username,
+                  }));
+                  xhr.onload = function(){
+                        if(xhr.status !=200){
+                              alert('Oops, error');
+                              window.location.href = 'login.html';
+                        }else{
+                              document.cookie = 'user=';
+                              document.cookie = 'id='
+                              window.location.href = 'login.html';
+                        }
+                      
+                        
+                  }
+            }
+      }
      
-// }
-// exit();
+}
+exit();
+
+function isLogIn(){
+      const username = (document.cookie.split(';')[1]).split('=')[1];
+      console.log(username)
+      if(username == ''){
+            window.location.href = 'login.html';
+      }
+}
+
+isLogIn();
