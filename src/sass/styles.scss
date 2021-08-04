@@ -100,8 +100,8 @@ body,p,div{
     }
     .div_users_online p{
       font-size: 20px;
-      margin-bottom: 3px;
       font-weight: 600;
+      // display: inline;
     }
     .div_users_online p:hover{
       font-size: 22px;
@@ -301,18 +301,25 @@ body,p,div{
       text-align: end;
       margin-top: 8px;
       }
-    .chat__my_message-content {
-      border-radius: 5px;
-      padding: 7px;
-      background-color: #ccc;
-      display: flex;
-      align-items: center;
-      margin-right: 10px;
-      margin-left: 5px;
-      font-size: 18px;
-      max-width: 50%;
-      word-break: break-word;
-    }
+//      .my_message_from_date{
+//       font-size: 12px;
+//       color: #5d5d5d;
+//       font-weight: 600;
+//       text-align: end;
+//       margin-top: 8px; 
+//      }
+//     .chat__my_message-content {
+//       // border-radius: 5px;
+//       // padding: 7px;
+//       // background-color: #ccc;
+//       display: flex;
+//       align-items: center;
+//       // margin-right: 10px;
+//       // margin-left: 5px;
+//       // font-size: 18px;
+//       // max-width: 50%;
+//       // word-break: break-word;
+//     }
     
     .chat__item--responder {
       flex-direction: row-reverse;
@@ -320,6 +327,19 @@ body,p,div{
       margin-top: 5px;
       margin-bottom: 7px;
 
+    }
+
+    .div_my_message{
+      border-radius: 5px;
+      padding: 7px;
+      background-color: #ccc;
+      display: flex;;
+      flex-direction: column;
+      margin-right: 10px;
+      margin-left: 5px;
+      font-size: 18px;
+      max-width: 50%;
+      word-break: break-word;
     }
     
       // .chat__item--responder .chat__message {
@@ -477,3 +497,110 @@ body,p,div{
     .style_underline{
       text-decoration:underline;
     }
+    .img_avatar{
+          width: 16%;
+          border-radius: 50%;
+          margin-top: 2%;
+    }
+    .div_in_users_online{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 1%;
+    }
+    .user_online{
+          margin-left: 1%;
+    }
+    .user_online_icon{
+          margin-right: 3%;
+    }
+    .img_in_messages{
+          border-radius: 50%;
+          width: 10%;
+    }
+    .content_about{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+    }
+    .about_information{
+          width: 40%;
+          height: 64vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 50px;
+          border: 3px solid grey;
+          background-image: url("../images/7.jpg");
+          padding-top: 20px;
+          padding-bottom: 20px;
+          overflow-y: auto;
+    }
+    .get_about_photo{
+          width: 40%;
+          border-radius: 50%;
+          border: 3px solid white;
+    }
+    .get_about_p{
+          color: rgb(174, 174, 174);
+          font-size: 22px;
+          margin-top: 10px;
+          word-break: break-word;
+          width: 80%;
+          font-weight: 600;
+          
+    }
+    .get_about_name{
+          color: rgb(206, 206, 206);
+          text-align: center;
+          font-size: 28px;
+    }
+    .content_about{
+          background-image: url("../images/2.png");
+          height: 100%;
+          width: 100%;
+    }
+    .add_information_about{
+      width: 40%;
+      height: 90vh;
+      margin-top: 60px;
+      background-image: url("../images/7.jpg");
+      border: 3px solid grey;
+    }
+    .form_about{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .add_info_about_label{
+          font-size: 20px;
+          color: rgb(174, 174, 174);
+    }
+    .add_info_about_input{
+          width: 60%;
+          height: 30px;
+          margin-bottom: 15px;
+          margin-top: 5px;
+    }
+    .add_info_about_textarea{
+      width: 60%;
+      height: 80px;
+      max-width: 60%;
+      min-width: 60%;
+      margin-bottom: 15px;
+      margin-top: 5px;
+}
+.add_info_about_button{
+      margin-top: 10px;
+      width: 45%;
+      height: 40px;
+      background-color: rgb(174, 174, 174);
+      border: 1px solid black;
+      font-weight: 600;
+}
+.add_info_about_p{
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 35px;
+      color: rgb(213, 213, 213);
+}

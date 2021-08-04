@@ -51,6 +51,9 @@
                               console.log(xhrLogin.response)
                               document.cookie = `user=${allUsers.username}`;
                               document.cookie = `id=${allUsers.user_id}`;
+                              localStorage.setItem('seconds',0);
+                              localStorage.setItem('minutes',0);
+                              localStorage.setItem('hours',0);
                               window.location.href = 'index.html';
                         }else{
                               alert(`Error ${xhrLogin.status}: ${xhrLogin.statusText}`);

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+</head>
+<body class="body_about">
+      <header>
+            <img class = 'img_logo' src = "images/logo.png" alt="">
+            <div class="header_buttons">
+                  <button class="button_in_header" onclick="window.location.href='index.html'">Private messages</button>
+                  <button class="button_in_header">Edit</button>
+                  <button class="button_in_header button_username" onclick="window.location.href='login.html'">Exit</button>
+            </div>
+           <!-- <div class="header_status">
+                 <p>You are online for: 1h 30m</p>
+                 <p class='local_time'>Your local time is: 00:00</p>
+           </div> -->
+      </header>
+      <div class="content_about">
+            <div class="about_information">
+                  <img class="get_about_photo" src="images/assets/default.jpg" alt="">
+                  <p class="get_about_p get_about_name">Name: ---</p>
+                  <p class="get_about_p get_about_gender">Gender: ---</p>
+                  <p class="get_about_p get_about_about">About: ---</p>
+                  <p class="get_about_p get_about_phone">Phone: ---</p>
+                  <p class="get_about_p get_about_country">Country: ---</p>
+                  <p class="get_about_p get_about_mail">Mail: --- </p>
+            </div>
+
+            <div class="add_information_about">
+                  <form class="form_about" action="">
+                        <p class="add_info_about_p">Add info</p>
+                        <label class="add_info_about_label" for="">Gender</label>
+                        <select class="add_info_about_input set_gender">
+                              <option value="">male</option>
+                              <option value="">female</option>
+                        </select>
+                        <label class="add_info_about_label" for="">About</label>
+                        <textarea class="add_info_about_textarea set_about" name="" id="" cols="30" rows="10"></textarea>
+                        <label class="add_info_about_label" for="">Phone</label>
+                        <input class="add_info_about_input set_phone" type="text">
+                        <label class="add_info_about_label" for="">Country</label>
+                        <input class="add_info_about_input set_country" type="text">
+                        <label class="add_info_about_label" for="">Mail</label>
+                        <input class="add_info_about_input set_mail" type="text">
+                        <label class="add_info_about_label" for="">Image</label>
+                        <input class="add_info_about_input set_image" type="text">
+                        <button class="add_info_about_button" onclick="return false">Log in</button>
+                  </form>
+            </div>
+      </div>
+      <!-- <div class="content_login"> 
+            <form class ='form_login' name = 'formLogin' action="#">
+                  <p>Authorization</p>
+                  <label for="">Login</label>
+                  <input name = 'username' type="text">
+                  <label for="">Password</label>
+                  <input name = 'password' type="text">
+                  <button onclick="return false" class = 'button_login'>Log in</button>
+                  <a href="registration.html">Registration</a>
+            </form>
+      </div> -->
+      <script src="/src/js/index.js"></script>
+</body>
+</html>
