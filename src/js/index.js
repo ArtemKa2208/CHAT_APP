@@ -5,6 +5,7 @@ import images from '../js/img.js'
 if(window.location.pathname === '/index.html'){
       let messageCounter = 0;
       let arrAllUsers;
+      let setNames = new Set();
       function sendMessage(){
             const button = document.querySelector('.send_message_button');
             const input = document.querySelector('.send_message_input');
@@ -17,10 +18,13 @@ if(window.location.pathname === '/index.html'){
             const lettersEntered = document.querySelector('.letters_entered');
             const punctuationEntered = document.querySelector('.punctuation_entered');
             let prewLength = 0;
-            let text_style = '';
             let countLetters = 0;
             let countPunctuation = 0;
             let lastLetter = '';
+            let bold = 0;
+            let italic = 0;
+            let underline = 0;
+            let formatText = '';
             button.onclick = function(){
                   let xhrSendMessages = new XMLHttpRequest(); 
                   const username = (document.cookie.split(';')[1]).split('=')[1];                     
@@ -28,7 +32,7 @@ if(window.location.pathname === '/index.html'){
                   xhrSendMessages.setRequestHeader('Content-Type', 'application/json');
                   xhrSendMessages.send(JSON.stringify({
                         datetime: new Date().toISOString(),
-                        message:input.value,
+                        message: formatText || input.value,
                         username:username,
                   }));
                   xhrSendMessages.onload = function(){
@@ -36,59 +40,66 @@ if(window.location.pathname === '/index.html'){
                               if(xhrSendMessages.status != 200){
                                     alert(`Error ${xhrSendMessages.status}: ${xhrSendMessages.statusText}`);
                               }
-                              // switch(text_style){
-                              //       case 'bold':
-                              //             secondDiv.classList.add('style_bold');   
-                              //       break;
-                              //       case 'italic':
-                              //             secondDiv.classList.add('style_italic');   
-                              //       break;
-                              //       case 'underline':
-                              //             secondDiv.classList.add('style_underline');   
-                              //       break;
-                              // }
+      
+                              styleBold.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
+                              styleItalic.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
+                              styleUnderline.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
+                              formatText = '';
                               input.value = '';
                               charactersEntered.innerHTML = '0 characters entered';
                               spaceEntered.innerHTML = '0 whitespace characters entered';
                               lettersEntered.innerHTML = '0 letters entered';
                               punctuationEntered.innerHTML = '0 punctuation marks entered'
-                              blockForMessage.scrollTop = 9999;
+                              blockForMessage.scrollTop = 99999999999;
+                              prewLength = 0;
+                              countLetters = 0;
                         } 
                   };
                 
             }
             styleBold.onclick = function(){
-                  if(text_style === 'italic' || text_style === 'bold' || text_style === 'underline'){
-                        text_style = '';
-                        styleItalic.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
+                  if(bold){
+                        let indexFirst = input.value.indexOf('<b>');
+                        let indexLast = input.value.indexOf('</b>');
+                        formatText = input.value.slice(indexFirst,indexFirst + 3);
+                        formatText = formatText.slice(indexLast, indexLast + 4);
+                        bold = 0;
                         styleBold.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
-                        styleUnderline.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
+                       
                   }else{
-                        text_style = 'bold';
+                        formatText = `<b>${input.value}</b>`
+                        bold = 1;
                         styleBold.style.backgroundColor = 'rgb(135, 219, 255)';
                   }
                   
             }
             styleItalic.onclick = function(){
-                  if(text_style === 'italic' || text_style === 'bold' || text_style === 'underline'){
-                        text_style = '';
+                  if(italic){
+                        let indexFirst = input.value.indexOf('<i>');
+                        let indexLast = input.value.indexOf('</i>');
+                        formatText = input.value.slice(indexFirst,indexFirst + 3);
+                        formatText = formatText.slice(indexLast, indexLast + 4);
+                        italic = 0;
                         styleItalic.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
-                        styleBold.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
-                        styleUnderline.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
+                       
                   }else{
-                        text_style = 'italic';
+                        formatText = `<i>${input.value}</i>`
+                        italic = 1;
                         styleItalic.style.backgroundColor = 'rgb(135, 219, 255)';
                   }
             }
             styleUnderline.onclick = function(){
-                  if(text_style === 'italic' || text_style === 'bold' || text_style === 'underline'){
-                        text_style = '';
-                        styleItalic.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
-                        styleBold.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
+                  if(underline){
+                        let indexFirst = input.value.indexOf('<u>');
+                        let indexLast = input.value.indexOf('</u>');
+                        formatText = input.value.slice(indexFirst,indexFirst + 3);
+                        formatText = formatText.slice(indexLast, indexLast + 4);
+                        underline = 0;
                         styleUnderline.style.backgroundColor = 'rgba(190, 236, 255, 0.646)';
-      
+                       
                   }else{
-                        text_style = 'underline';
+                        formatText = `<u>${input.value}</u>`
+                        underline = 1;
                         styleUnderline.style.backgroundColor = 'rgb(135, 219, 255)';
                   }
             }
@@ -117,39 +128,113 @@ if(window.location.pathname === '/index.html'){
                   prewLength = input.value.length;
                   lastLetter = input.value[input.value.length-1];
                   console.log(input.value.split(' '));
+                  
+            
             }
+            input.addEventListener('keyup', function(e) {
+                  if (e.keyCode === 13) {
+                        let xhrSendMessages = new XMLHttpRequest(); 
+                        const username = (document.cookie.split(';')[1]).split('=')[1];                     
+                        xhrSendMessages.open("POST",'https://studentschat.herokuapp.com/messages');
+                        xhrSendMessages.setRequestHeader('Content-Type', 'application/json');
+                        xhrSendMessages.send(JSON.stringify({
+                              datetime: new Date().toISOString(),
+                              message:input.value,
+                              username:username,
+                        }));
+                        xhrSendMessages.onload = function(){
+                              if(input.value){
+                                    if(xhrSendMessages.status != 200){
+                                          alert(`Error ${xhrSendMessages.status}: ${xhrSendMessages.statusText}`);
+                                    }
+                                    input.value = '';
+                                    charactersEntered.innerHTML = '0 characters entered';
+                                    spaceEntered.innerHTML = '0 whitespace characters entered';
+                                    lettersEntered.innerHTML = '0 letters entered';
+                                    punctuationEntered.innerHTML = '0 punctuation marks entered'
+                                    blockForMessage.scrollTop = 99999999999;
+                                    prewLength = 0;
+                                    countLetters = 0;
+                              } 
+                        };
+                  }
+            })
       }
       
       sendMessage();
-      
       function newChat(){
             const username = document.querySelectorAll('.user_online');
             const tabs = document.querySelector('.tabs');
+            let flag = true;
             for(let i = 0; i < username.length; i++){
                   username[i].onclick = function(){
-                        const button = document.createElement('button');
-                        const p = document.createElement('p');
-                        p.classList.add('close_chat');
-                        p.innerHTML = '[x]';
-                        button.innerHTML = username[i].innerHTML + " ";
-                        tabs.appendChild(button);
-                        button.appendChild(p);
-                        closeChat();
+                        if(setNames.size === 0){
+                                    const button = document.createElement('button');
+                                    const p = document.createElement('p');
+                                    p.classList.add('close_chat');
+                                    p.innerHTML = '[x]';
+                                    button.innerHTML = username[i].innerHTML + " ";
+                                    tabs.appendChild(button);
+                                    button.appendChild(p);
+                                    closeChat(username[i].innerText,i);  
+                                    // const pCloseChat = document.querySelectorAll('.close_chat');
+                                    // pCloseChat[i].onclick = function(){
+                                    //       console.log(username + ' del')
+                                    //       setNames.delete(username);
+                                    //       pCloseChat[i].parentNode.parentNode.removeChild(pCloseChat[i].parentNode);
+                                    // }
+                        }else{
+                              setNames.forEach(function(value){
+                                    console.log('0 ' + value)
+                                    console.log(value + ' ' + username[i].innerText)
+                                    if(value === username[i].innerText){
+                                          // console.log(value.innerText)
+                                          console.log('aga')
+                                          flag = false;
+                                          
+                                    }
+                              })
+                              if(flag){
+                                    const button = document.createElement('button');
+                                    const p = document.createElement('p');
+                                    p.classList.add('close_chat');
+                                    p.innerHTML = '[x]';
+                                    button.innerHTML = username[i].innerHTML + " ";
+                                    tabs.appendChild(button);
+                                    button.appendChild(p);
+                                    closeChat(username[i].innerText,i);
+                                    // const pCloseChat = document.querySelectorAll('.close_chat');
+                                    // pCloseChat[i].onclick = function(){
+                                    //       console.log(username + ' del')
+                                    //       setNames.delete(username);
+                                    //       pCloseChat[i].parentNode.parentNode.removeChild(pCloseChat[i].parentNode);
+                                    // }
+
+                              }
+                        }
+                        setNames.add(username[i].innerText);
+                        console.log(setNames)
                   }
             }
       }
       
       
-      function closeChat(){
+      function closeChat(username,i){
+            console.log('1: ' + username)
             const pCloseChat = document.querySelectorAll('.close_chat');
-            for(let i = 0; i < pCloseChat.length; i++){
+            // for(let i = 0; i < pCloseChat.length; i++){
                   pCloseChat[i].onclick = function(){
+                        console.log(username + ' del')
+                        setNames.delete(username);
                         pCloseChat[i].parentNode.parentNode.removeChild(pCloseChat[i].parentNode);
                   }
-            }
+            // }
       }
       function getUsers(){
             const divUsersOnline = document.querySelector('.div_users_online');
+            // while (divUsersOnline.firstChild) {
+            //       divUsersOnline.firstChild.remove()
+            // }
             const pOnline = document.querySelector('.p_online');
             let xhr = new XMLHttpRequest();
             let allUsers;
@@ -189,8 +274,7 @@ if(window.location.pathname === '/index.html'){
                         div.appendChild(img);
                         div.appendChild(p_name);
                         divUsersOnline.appendChild(div);
-                   
-                        
+                     
                   }
                   pOnline.innerHTML = "Online: " + online;
                   newChat();
@@ -199,6 +283,7 @@ if(window.location.pathname === '/index.html'){
       
       }
       
+      //  setInterval(getUsers,200);
       getUsers();
       
       function getMessage(){
@@ -209,11 +294,12 @@ if(window.location.pathname === '/index.html'){
             xhr.open('GET','https://studentschat.herokuapp.com/messages');
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send();
-            console.log(arrAllUsers);
+            // console.log(arrAllUsers);
             xhr.onload = function(){
                   messages = JSON.parse(xhr.response);
                  
                   for(let i = messageCounter; i < messages.length; i++){
+
                         const date = new Date(messages[i].datetime);
                         const firstDiv = document.createElement('div');
                         const secondDiv = document.createElement('div');
@@ -227,14 +313,14 @@ if(window.location.pathname === '/index.html'){
                         const year = date.getFullYear();
                         const hours = (date.getHours() < 10) ? '0' + date.getHours() : date.getHours();
                         const minutes = (date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes();
+
                         if(messages[i].username === username){
                               firstDiv.classList.add('chat__item','chat__item--responder'); 
                               thirdDiv.classList.add('chat__my_message-content'); 
                               secondDiv.classList.add('div_my_message');
-                              thirdDiv.innerText = messages[i].message;
+                              thirdDiv.innerHTML = messages[i].message;
                               pDate.classList.add('message_from_date');
                               pDate.innerText = `${day}.${month}.${year} ${hours}:${minutes}`; 
-
                               secondDiv.appendChild(thirdDiv); 
                               secondDiv.appendChild(pDate); 
                         }else{
@@ -263,23 +349,21 @@ if(window.location.pathname === '/index.html'){
                               secondDiv.appendChild(pName); 
                               secondDiv.appendChild(pText); 
                               secondDiv.appendChild(pDate); 
-                              firstDiv.appendChild(msgImg);
-                              
+                              firstDiv.appendChild(msgImg);      
                         }
                         
                         blockForMessage.appendChild(firstDiv);
                         firstDiv.appendChild(secondDiv);
                         // blockForMessage.appendChild(firstDiv);
                         // firstDiv.appendChild(secondDiv);
-                        blockForMessage.scrollTop = 9999;
-                        messageCounter++;
-                        
+                        blockForMessage.scrollTop = 99999999999;
+                        messageCounter++;   
                   }
             }
           
       }
       // getMessage();
-      setInterval(getMessage, 200);
+      setInterval(getMessage, 100);
       
       function getTime(){
             const date = new Date();
@@ -304,6 +388,7 @@ if(window.location.pathname === '/index.html'){
       
       function getOnline(){
             const timeOnline = document.querySelector('.time_online');
+            console.log('11_11_11');
             localStorage.seconds++;
             if(localStorage.seconds > 59){
                   localStorage.minutes++;
@@ -324,81 +409,150 @@ if(window.location.pathname === '/index.html'){
 }
 
 if(window.location.pathname === '/about.html'){
-            function getInfo(){
-                  const myName = (document.cookie.split(';')[1]).split('=')[1];
-                  const getAboutGender = document.querySelector('.get_about_gender');
-                  const getAboutName = document.querySelector('.get_about_name');
-                  const getAboutAbout = document.querySelector('.get_about_about');
-                  const getAboutPhone = document.querySelector('.get_about_phone');
-                  const getAboutCountry = document.querySelector('.get_about_country');
-                  const getAboutMail = document.querySelector('.get_about_mail');
-                  const getAboutImg = document.querySelector('.get_about_photo');
-                  const xhrUsers = new XMLHttpRequest();
-                  xhrUsers.open('GET','https://studentschat.herokuapp.com/users');
-                  xhrUsers.setRequestHeader('Content-Type', 'application/json');
-                  xhrUsers.send();
-                  xhrUsers.onload = function(){
-                        const users = JSON.parse(xhrUsers.response);
-                        users.forEach(element => {
-                              if(element.username === myName){
-                                    getAboutName.innerText =  myName;
-                                    getAboutGender.innerText = (element.gender) ? 'Gender: ' + element.gender : 'Gender: ---';
-                                    getAboutAbout.innerText = (element.about) ? 'About: ' + element.about : 'About: ---';
-                                    getAboutPhone.innerText = (element.phone) ? 'Phone: ' + element.phone : 'Phone: ---';
-                                    getAboutCountry.innerText = (element.country) ? 'Country: ' + element.country : 'Country: ---';
-                                    getAboutMail.innerText = (element.mail) ? 'Mail: ' + element.mail : 'Mail: ---';
-                                    getAboutImg.src = (element.avatarId) ? images[element.avatarId] : images.default
-                              }
-                        });
-                  }
-            }
-            getInfo()
-            function setInfo(){
-                  const myName = (document.cookie.split(';')[1]).split('=')[1];
-                  const gender = document.querySelector('.set_gender');
-                  const about = document.querySelector('.set_about');
-                  const phone = document.querySelector('.set_phone');
-                  const country = document.querySelector('.set_country');
-                  const mail = document.querySelector('.set_mail');
-                  const image = document.querySelector('.set_image');
-                  const button = document.querySelector('.add_info_about_button');
-                  button.onclick = function(){
-                        const xhrUsers = new XMLHttpRequest();
-                        xhrUsers.open('POST','https://studentschat.herokuapp.com/users');
-                        xhrUsers.setRequestHeader('Content-Type', 'application/json');
-                        xhrUsers.send(JSON.stringify({
-                              username:myName,
-                              gender:gender.value,
-                              about:about.value,
-                              phone:phone.value,
-                              country:country.value,
-                              mail:mail.value,
-                              image:image.value,
-                        }));
-                        xhrUsers.onload = function(){
-                              window.location.href = 'index.html';
+      function getInfo(){
+            const myName = (document.cookie.split(';')[1]).split('=')[1];
+            console.log('1230' + myName)
+            const getAboutGender = document.querySelector('.get_about_gender');
+            const getAboutName = document.querySelector('.get_about_name');
+            const getAboutAbout = document.querySelector('.get_about_about');
+            const getAboutPhone = document.querySelector('.get_about_phone');
+            const getAboutCountry = document.querySelector('.get_about_country');
+            const getAboutMail = document.querySelector('.get_about_mail');
+            const getAboutImg = document.querySelector('.get_about_photo');
+            const xhrUsers = new XMLHttpRequest();
+            xhrUsers.open('GET','https://studentschat.herokuapp.com/users');
+            xhrUsers.setRequestHeader('Content-Type', 'application/json');
+            xhrUsers.send();
+            xhrUsers.onload = function(){
+                  const users = JSON.parse(xhrUsers.response);
+                  users.forEach(element => {
+                        if(element.username === myName){
+                              console.log('000' + myName)
+                              getAboutName.innerText =  myName;
+                              getAboutGender.innerText = (element.gender) ? 'Gender: ' + element.gender : 'Gender: ---';
+                              getAboutAbout.innerText = (element.about) ? 'About: ' + element.about : 'About: ---';
+                              getAboutPhone.innerText = (element.phone) ? 'Phone: ' + element.phone : 'Phone: ---';
+                              getAboutCountry.innerText = (element.country) ? 'Country: ' + element.country : 'Country: ---';
+                              getAboutMail.innerText = (element.mail) ? 'Mail: ' + element.mail : 'Mail: ---';
+                              getAboutImg.src = (element.avatarId) ? images[element.avatarId] : images.default
                         }
+                  });
+            }      
+      }
+      getInfo()
+      function setInfo(){
+            const myName = (document.cookie.split(';')[1]).split('=')[1];
+            const gender = document.querySelector('.set_gender');
+            const about = document.querySelector('.set_about');
+            const phone = document.querySelector('.set_phone');
+            const country = document.querySelector('.set_country');
+            const mail = document.querySelector('.set_mail');
+            const image = document.querySelector('.set_image');
+            const button = document.querySelector('.add_info_about_button');
+            button.onclick = function(){
+                  const xhrUsers = new XMLHttpRequest();
+                  xhrUsers.open('POST','https://studentschat.herokuapp.com/users');
+                  xhrUsers.setRequestHeader('Content-Type', 'application/json');
+                  xhrUsers.send(JSON.stringify({
+                        username:myName,
+                        gender:gender.value,
+                        about:about.value,
+                        phone:phone.value,
+                        country:country.value,
+                        mail:mail.value,
+                        image:image.value,
+                  }));
+                  xhrUsers.onload = function(){
+                        window.location.href = 'index.html';
                   }
+            }
                   
+      }
+      setInfo()
+      function getOnlineAbout(){
+            localStorage.seconds++;
+            if(localStorage.seconds > 59){
+                  localStorage.minutes++;
+                  localStorage.seconds = 0;
             }
-            setInfo()
-            function getOnlineAbout(){
-                  localStorage.seconds++;
-                  if(localStorage.seconds > 59){
-                        localStorage.minutes++;
-                        localStorage.seconds = 0;
-                  }
-                  if(localStorage.minutes > 59){
-                        localStorage.hours++;
-                        localStorage.minutes = 0;
-                  }
+            if(localStorage.minutes > 59){
+                  localStorage.hours++;
+                  localStorage.minutes = 0;
             }
+      }
            
-            setInterval(getOnlineAbout,1000);
+      setInterval(getOnlineAbout,1000);
 }
 
+if(window.location.pathname === '/registration.html'){
+      function registration(){
+            const buttonRegist = document.querySelector('.button_regist');
+            console.log('a')
+            buttonRegist.onclick = function(){
+                  const form = new FormData(document.forms.formRegist);
+                  const username = form.get('username');
+                  const password = form.get('password');
+                  console.log(username);
+                  console.log(password)
+                        let xhrRegist = new XMLHttpRequest();
+                        xhrRegist.open("POST",'https://studentschat.herokuapp.com/users/register');
+                        xhrRegist.setRequestHeader('Content-Type', 'application/json');
+                        try {
+                              xhrRegist.send(JSON.stringify({username,password}));
+                              xhrRegist.onload = function(){ // какая то беда, не всегда заходит сюда
+                                    alert(xhrRegist.status)
+                                    if(xhrRegist.status === 200){
+                                          alert('Registration completed successfully');
+                                          window.location.href = 'login.html';
+                                    }else{
+                                          alert('This user already exists');
+                                          window.location.href = 'registration.html';
+                                    }
+                              }
+                        } catch (error) {
+                              alert(error);
+                        }
+            }
+      }
+      registration();
+}
 
-function exit(){
+if(window.location.pathname === '/login.html'){
+      function login(){
+            const buttonLogin = document.querySelector('.button_login');
+            buttonLogin.onclick = function(){;
+                  const form = new FormData(document.forms.formLogin);
+                  const username = form.get('username');
+                  const password = form.get('password');
+                  const xhrLogin = new XMLHttpRequest();
+                  xhrLogin.open('POST','https://studentschat.herokuapp.com/users/login');
+                  xhrLogin.setRequestHeader('Content-Type', 'application/json');
+                  xhrLogin.send(JSON.stringify({
+                        'username': username, 
+                        'password': password
+                  }));
+                  xhrLogin.onload = function(){
+                        // let flag = true;
+                        if(xhrLogin.status === 200){
+                              let allUsers = JSON.parse(xhrLogin.response)[0];
+                              console.log(xhrLogin.response)
+                              document.cookie = `user=${allUsers.username}`;
+                              document.cookie = `id=${allUsers.user_id}`;
+                              localStorage.setItem('seconds',0);
+                              localStorage.setItem('minutes',0);
+                              localStorage.setItem('hours',0);
+                              window.location.href = 'index.html';
+                        }else{
+                              alert(`Error ${xhrLogin.status}: ${xhrLogin.statusText}`);
+                        }
+                  }
+            }
+      }
+      login();
+}
+
+if(window.location.pathname === '/index.html' || window.location.pathname === '/about.html' || window.location.pathname === '/'){
+      function exit(){
       const username = (document.cookie.split(';')[1]).split('=')[1];
       const userId = (document.cookie.split(';')[2]).split('=')[1];
       const buttonExit = document.querySelector('.button_username');
@@ -429,20 +583,20 @@ function exit(){
             }
       }
      
-}
-exit();
+      }
+      exit();
 
-function isLogIn(){
+      function isLogIn(){
       const username = (document.cookie.split(';')[1]).split('=')[1];
       console.log(username)
       if(username == ''){
             window.location.href = 'login.html';
       }
-}
+      }
 
-isLogIn();
+      isLogIn();
 
-function autoExit(){
+      function autoExit(){
       const username = (document.cookie.split(';')[1]).split('=')[1];
       const xhr = new XMLHttpRequest();
       let flag = false;
@@ -462,6 +616,7 @@ function autoExit(){
                   window.location.href = 'login.html';
             }
       }
-}
+      }
 
-setInterval(autoExit, 1000*60);
+      setInterval(autoExit, 500);
+}
